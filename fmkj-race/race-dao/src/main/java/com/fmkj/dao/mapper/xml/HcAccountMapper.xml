@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fmkj.dao.mapper.HcAccountMapper">
+	<resultMap id="BaseResultMap" type="com.fmkj.dao.domain.HcAccount">
+		<!-- WARNING - @mbg.generated -->
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="nation" jdbcType="VARCHAR" property="nation" />
+		<result column="telephone" jdbcType="VARCHAR" property="telephone" />
+		<result column="dycode" jdbcType="VARCHAR" property="dycode" />
+		<result column="dycodetime" jdbcType="TIMESTAMP" property="dycodetime" />
+		<result column="logo" jdbcType="VARCHAR" property="logo" />
+		<result column="nickname" jdbcType="VARCHAR" property="nickname" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+		<result column="password" jdbcType="VARCHAR" property="password" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="cardnum" jdbcType="VARCHAR" property="cardnum" />
+		<result column="authlock" jdbcType="BIT" property="authlock" />
+		<result column="rid" jdbcType="INTEGER" property="rid" />
+		<result column="make_Weight" jdbcType="INTEGER" property="makeWeight" />
+		<result column="my_p" jdbcType="DOUBLE" property="myP" />
+		<result column="grade_id" jdbcType="INTEGER" property="gradeId" />
+		<result column="score" jdbcType="INTEGER" property="score" />
+		<result column="card_status" jdbcType="INTEGER" property="cardStatus" />
+		<result column="isboong" jdbcType="INTEGER" property="isboong" />
+		<result column="cdbid" jdbcType="BIGINT" property="cdbid" />
+	</resultMap>
+	
+	<resultMap id="BaseResultMap1" type="java.util.HashMap">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="countfriends" jdbcType="INTEGER" property="countfriends" />
+		<result column="countpage" jdbcType="INTEGER" property="countpage" />
+	</resultMap>
+	
+	<select id="selectByNickname" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select h.* from hc_account h where nickname = #{nickname} or telephone = #{nickname}
+	</select>
+	
+	<!-- 通过用户属性查询用户信息 -->
+	<select id="selectAccountByExample" parameterType="com.fmkj.dao.domain.HcAccount"
+		resultMap="BaseResultMap">
+		select * from hc_account
+		where 1=1
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="nation != null">
+			and nation = #{nation}
+		</if>
+		<if test="telephone != null">
+			and telephone = #{telephone}
+		</if>
+		<if test="nickname != null">
+			and nickname like "%"#{nickname}"%"
+		</if>
+		<if test="email != null">
+			and email like "%"#{email}"%"
+		</if>
+		<if test="name != null">
+			and name like "%"#{nation}"%"
+		</if>
+		<if test="cardnum != null">
+			and cardnum = #{cardnum}
+		</if>
+		<if test="rid != null">
+			and rid = #{rid}
+		</if>
+		<if test="cdbid != null">
+			and cdbid = #{cdbid}
+		</if>
+	</select>
+	
+	<!-- 给邀请人奖励1P -->
+	<update id="giveInviterRewardP">
+		update  hc_account set  my_p=my_p+1 where id=#{uid}
+	</update>
+	
+	<!-- 查询单个用户信息，包括用户总积分 -->
+	<select id="queryUserTaskMessage" parameterType="java.lang.String" resultType="com.fmkj.dao.domain.HcAccount">
+		select ha.id,ha.telephone,ha.logo,ha.nickname,ha.email,ha.rid,ha.my_p as myP,ha.grade_id as gradeId,ha.card_status as cardStatus,
+       		ha.isboong,ha.cdbid,ha.password,sum(hp.points_num) as score 
+        	from hc_account ha
+        	left join hc_points_record hp on ha.id = hp.uid
+          	where ha.id=#{uid}
+	</select>
+	
+	<!-- 传入uid查询所有好友 -->
+	<select id="selectAllFriends" resultMap="BaseResultMap">
+		<!-- select ha.id,ha.telephone,ha.logo,ha.nickname,ha.authlock,ha.my_p,ha.grade_id,sum(hp.points_num) as score,
+			ha.card_status,ha.isboong,ha.cdbid
+		   from hc_friend hf
+	       left join hc_account ha on hf.friend_id = ha.id
+	       left join hc_points_record hp on ha.id = hp.uid
+	       where hf.account_id=#{uid} and hf.pass=1
+           group by ha.id
+	       limit #{start},#{row} -->
+	       
+	       select ha.id,ha.telephone,ha.logo,ha.nickname,ha.authlock,ha.my_p,ha.grade_id,sum(hp.points_num) as score,
+			ha.card_status,ha.isboong,ha.cdbid
+		   from hc_account  ha
+	       left join hc_friend hf on hf.friend_id = ha.id
+	       left join hc_points_record hp on  hp.uid = ha.id
+	       where hf.pass=1 and  hf.account_id=#{uid}
+           group by ha.id
+	       limit #{start},#{row} 
+	</select>
+	
+	<!-- 获取好友总数及页数 -->
+	<select id="getCountFriend" resultType="java.util.HashMap">
+		select count(ha.id) as countfriends,ceil(count(ha.id)/#{row}) as countpage 
+			from hc_friend hf
+	       	left join hc_account ha on hf.friend_id = ha.id
+	       	where hf.account_id=#{uid} and hf.pass=1
+	</select>
+</mapper>
