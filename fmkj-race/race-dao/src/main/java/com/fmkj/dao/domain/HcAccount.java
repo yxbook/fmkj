@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @TableName("hc_account")
-public class HcAccount extends Model<HcAccount>{
+public class HcAccount extends Model<HcAccount> implements Serializable{
 	@TableId
 	private Integer id;
 

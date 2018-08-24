@@ -11,6 +11,7 @@
         <module>fmkj-eureka</module>
         <module>fmkj-common</module>
         <module>fmkj-race</module>
+        <module>fmkj-gateway</module>
     </modules>
     <packaging>pom</packaging>
 
