@@ -1,25 +1,3 @@
 spring:
-  application:
-    name: fmkj-gateway
-#  cloud:
-#    config:
-#      discovery:
-#        enabled: true
-#        service-id: CONFIG
-#      profile: test
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
-zuul:
-  #全部服务都可以传递Cookie信息
-  sensitive-headers:
-  routes:
-    #自定义路由配置
-    fmkj-race: /myRace/**
-    #sensitiveHeaders设置为空请求参数里面才可以获取到Cookie信息
-    #sensitiveHeaders:
-  #排除某些路由 写法  - /**/myRace/**
-  ignored-patterns:
-
-
+  profiles:
+    active: dev
