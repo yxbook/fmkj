@@ -63,6 +63,7 @@ public class BaseController<T,S extends IService<T>> implements BaseApiService<T
         try {
             return new BaseResult(BaseResultEnum.SUCCESS,service.selectList(query.getEntityWrapper()));
         }catch (Exception e){
+            e.printStackTrace();
             return new BaseResult(BaseResultEnum.ERROR,"请检查参数是否正确");
         }
     }
@@ -71,10 +72,11 @@ public class BaseController<T,S extends IService<T>> implements BaseApiService<T
     public BaseResult<Page<T>> selectPage(@RequestParam Map<String, Object> params) {
         Query query = new Query<T>(params);
         try {
-            Page<T> tPage =new Page<>(query.getPage(),query.getSize());
+            Page<T> tPage =new Page<>(query.getPageNo(),query.getPageSize());
             tPage.setSearchCount(true);
             return new BaseResult(BaseResultEnum.SUCCESS,service.selectPage(tPage,query.getEntityWrapper()));
         }catch (Exception e){
+            e.printStackTrace();
             return new BaseResult(BaseResultEnum.ERROR,"请检查参数是否正确");
         }
     }
@@ -102,9 +104,9 @@ public class BaseController<T,S extends IService<T>> implements BaseApiService<T
     public class Query<T> extends LinkedHashMap<String, Object> {
         private static final long serialVersionUID = 1L;
         //当前页码
-        private int page = 1;
+        private int pageNo = 1;
         //每页条数
-        private int size = 10;
+        private int pageSize = 10;
 
         private EntityWrapper<T> entityWrapper = new EntityWrapper<>();
 
@@ -112,20 +114,22 @@ public class BaseController<T,S extends IService<T>> implements BaseApiService<T
             if (null != params){
                 this.putAll(params);
                 //分页参数
-                if(params.get("page")!=null) {
-                    this.page = Integer.parseInt(params.get("page").toString());
+                if(params.get("pageNo")!=null) {
+                    this.pageNo = Integer.parseInt(params.get("pageNo").toString());
                 }
-                if(params.get("size")!=null) {
-                    this.size = Integer.parseInt(params.get("size").toString());
+                if(params.get("pageSize")!=null) {
+                    this.pageSize = Integer.parseInt(params.get("pageSize").toString());
                 }
+                // 降序字段
                 if(params.get("orderBy")!=null) {
                     entityWrapper.orderBy(params.get("orderBy").toString(),false);
                 }
+                // 升序字段
                 if(params.get("orderByAsc")!=null) {
                     entityWrapper.orderBy(params.get("orderByAsc").toString(),true);
                 }
-                this.remove("page");
-                this.remove("size");
+                this.remove("pageNo");
+                this.remove("pageSize");
                 this.remove("orderBy");
                 this.remove("orderByAsc");
                 this.forEach((k,v) ->{
@@ -139,20 +143,20 @@ public class BaseController<T,S extends IService<T>> implements BaseApiService<T
         }
 
 
-        public int getPage() {
-            return page;
+        public int getPageNo() {
+            return pageNo;
         }
 
-        public void setPage(int page) {
-            this.page = page;
+        public void setPageNo(int pageNo) {
+            this.pageNo = pageNo;
         }
 
-        public int getSize() {
-            return size;
+        public int getPageSize() {
+            return pageSize;
         }
 
-        public void setSize(int size) {
-            this.size = size;
+        public void setPageSize(int pageSize) {
+            this.pageSize = pageSize;
         }
 
         public EntityWrapper<T> getEntityWrapper() {
