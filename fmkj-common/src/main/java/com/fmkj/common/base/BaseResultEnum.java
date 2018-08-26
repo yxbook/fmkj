@@ -13,7 +13,8 @@ public enum BaseResultEnum {
     ERROR(503,"请求失败"),
     BLANK(400,"请求错误"),
     TIMEOUT(408,"请求超时"),
-    NOACCESS(401,"未授权");
+    NOACCESS(401,"未授权"),
+    DEGRAD(409,"服务降级");
     public int status;
     public String msg;
     private BaseResultEnum(int status, String msg) {

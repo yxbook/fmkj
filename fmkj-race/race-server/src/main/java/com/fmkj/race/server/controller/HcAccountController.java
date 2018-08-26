@@ -13,10 +13,12 @@ import com.fmkj.common.validator.NotNullValidator;
 import com.fmkj.race.dao.domain.HcAccount;
 import com.fmkj.race.server.service.HcAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Map;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/race")
@@ -31,8 +33,7 @@ public class HcAccountController extends BaseController<HcAccount, HcAccountServ
     //@ApiOperation(value="查询HcAccount用户信息", notes="分页查询用户信息")
 
     @GetMapping(value = "selectPage")
-    public BaseResult<Page<HcAccount>> selectPage(@RequestParam Map<String, Object> params) {
-
+    public BaseResult<Page<HcAccount>> selectPage(@RequestParam HashMap<String, Object> params) {
         Query<HcAccount> query = new Query<HcAccount>(params);
         // 参数校验
         ComplexResult validatResult = FluentValidator.checkAll()
@@ -58,24 +59,5 @@ public class HcAccountController extends BaseController<HcAccount, HcAccountServ
         return new BaseResult<Page<HcAccount>>(BaseResultEnum.SUCCESS, result);
     }
 
-
-    @PostMapping("/findUserPost")
-    public String findUserPost(@RequestBody String message) {
-
-        //hcAccountService.findUserPost(); 执行业务
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-
-        return "findUserPost服务是通的";
-    }
-
-    @GetMapping("/findUserGet")
-    public String findUserGet(@RequestParam String message) {
-
-        //hcAccountService.findUserGet(); 执行业务
-        System.out.println("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-
-
-        return "findUserGet服务是通的";
-    }
 
 }

@@ -30,6 +30,7 @@
 			<artifactId>spring-cloud-config-client</artifactId>
 		</dependency>
 
+		<!--MQ消息队列组件-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-amqp</artifactId>

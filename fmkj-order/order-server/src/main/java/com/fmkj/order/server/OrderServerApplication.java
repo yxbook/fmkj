@@ -11,6 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @SpringCloudApplication
 @ComponentScan(basePackages = "com.fmkj")
+@EnableFeignClients(basePackages = "com.fmkj.order.client")
 @MapperScan("com.fmkj.order.dao.*")
 public class OrderServerApplication {
 

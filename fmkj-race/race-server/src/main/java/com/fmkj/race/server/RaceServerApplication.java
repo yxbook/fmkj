@@ -9,7 +9,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@EnableFeignClients(basePackages = "com.fmkj.race.client")
 @SpringCloudApplication
 @ComponentScan(basePackages = "com.fmkj")
 @MapperScan("com.fmkj.race.dao.*")
