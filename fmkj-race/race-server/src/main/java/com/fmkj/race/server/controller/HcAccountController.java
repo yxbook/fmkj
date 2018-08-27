@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/race")
@@ -33,7 +33,7 @@ public class HcAccountController extends BaseController<HcAccount, HcAccountServ
     //@ApiOperation(value="查询HcAccount用户信息", notes="分页查询用户信息")
 
     @GetMapping(value = "selectPage")
-    public BaseResult<Page<HcAccount>> selectPage(@RequestParam HashMap<String, Object> params) {
+    public BaseResult<Page<HcAccount>> selectPage(@RequestParam Map<String, Object> params) {
         Query<HcAccount> query = new Query<HcAccount>(params);
         // 参数校验
         ComplexResult validatResult = FluentValidator.checkAll()
